@@ -14,13 +14,13 @@ class CreateSalesOrderProductsTable extends Migration
     public function up()
     {
         Schema::create('sales_order_products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sales_order_id')->constrained('sales_orders');
-            $table->foreignId('product_id')->constrained('products');
+            $table->bigIncrements('id');
+            $table->bigInteger('sales_order_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
             $table->integer('quantity');
             $table->decimal('price',10,2);
             $table->decimal('Amount',10,2);
-            $table->foreignId('stock_availability_id')->constrained('stock_availability');
+            $table->bigInteger('stock_availability_id')->unsigned();
             $table->timestamps();
         });
     }

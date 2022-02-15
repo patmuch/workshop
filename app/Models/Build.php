@@ -7,28 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 class Build extends Model
 {
     
-   protected $fillable = ['product_id','user_id','customer_id','production_time','notes','production_stage_id'];
+   protected $fillable = ['buildable_id','buildable_type','user_id','notes','production_stage_id'];
 
-    public function materials()
-    {
-        return $this->belongsToMany('App\Models\Material');
-    }
-
+  
     public function productionStage()
     {
         return $this->belongsTo('App\Models\ProductionStage');
     }
 
-    public function product()
-    {
-        return $this->belongsTo('App\Models\Product');
-    }
+   
     public function user()
     {
         return $this->belongsTo('App\Models\user');
     }
-    public function customer()
+
+    public function buildable()
     {
-        return $this->belongsTo('App\Models\Customer');
+        return $this->morphTo();
     }
+
+    public function materials()
+    {
+        return $this->belongsToMany('App\Models\Material','build_materials')
+                    ->withPivot(['build_id','material_id','quantity'])
+                    ->withTimestamps();
+    }
+  
 }

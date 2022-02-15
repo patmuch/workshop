@@ -29,7 +29,7 @@ class CustomerController extends BaseController
 
     public function list()
     {
-        $customers = $this->customer->pluck('fname', 'id');
+        $customers = $this->customer->all();
 
         return $this->sendResponse($customers, 'Customers list');
     }

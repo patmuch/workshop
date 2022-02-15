@@ -16,6 +16,7 @@ window.Form = Form;
 
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
+Vue.prototype.$user = window.user ;
 
 import Swal from 'sweetalert2';
 
@@ -58,6 +59,10 @@ const router = new VueRouter({
 });
 // Routes End
 
+
+import Vue2Filters from 'vue2-filters';
+
+Vue.use(Vue2Filters);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -13,10 +13,22 @@
         <router-link to="/materials" class="nav-link">
           <i class="nav-icon fas fa-database yellow"></i>
           <p>
-            Material
+            Raw Material
           </p>
         </router-link>
       </li>
+
+      <li class="nav-item">
+        <router-link to="/receive" class="nav-link">
+          <i class="nav-icon fas fa-truck green"></i>
+          <p>
+            Receiving
+          </p>
+        </router-link>
+      </li>
+
+
+
 
        <li class="nav-item">
         <router-link to="/products" class="nav-link">
@@ -57,23 +69,38 @@
 
       </li>
 
-      <li class="nav-item">
-        <router-link to="/receive" class="nav-link">
-          <i class="nav-icon fas fa-cart-arrow-down green"></i>
-          <p>
-            Receive 
-          </p>
-        </router-link>
-      </li>
+      
 
       <li class="nav-item">
         <router-link to="/make" class="nav-link">
           <i class="nav-icon fas fa-upload  yellow "></i>
           <p>
-            Production
+               Production 
           </p>
         </router-link>
       </li>
+
+
+      <li class="nav-item">
+              <router-link to="/recipe" class="nav-link">
+                  <i class="nav-icon fas fa-th-large blue"></i>
+                  <p>
+                      Order Recipe 
+                  </p>
+              </router-link>
+         </li>
+
+         
+
+      <li class="nav-item">
+        <router-link to="/wipInventory" class="nav-link">
+          <i class="nav-icon fas fa-database  green "></i>
+          <p>
+            WIP Inventory 
+          </p>
+        </router-link>
+      </li>
+
 
       <li class="nav-item has-treeview">
         <a href="#" class="nav-link">
@@ -93,6 +120,7 @@
               </p>
             </router-link>
           </li>
+
           <li class="nav-item">
             <router-link to="/customers" class="nav-link">
               <i class="nav-icon fas fa-user-tag green"></i>
@@ -144,23 +172,9 @@
               </p>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link to="/product/tag" class="nav-link">
-              <i class="nav-icon fas fa-tags green"></i>
-              <p>
-                Tags
-              </p>
-            </router-link>
-          </li>
+        
 
-          <li class="nav-item">
-              <router-link to="/product/recipe" class="nav-link">
-                  <i class="nav-icon fas fa-th-large blue"></i>
-                  <p>
-                      Product recipe 
-                  </p>
-              </router-link>
-            </li>
+        
         </ul>
       </li>
           

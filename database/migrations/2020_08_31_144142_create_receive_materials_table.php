@@ -14,12 +14,11 @@ class CreateReceiveMaterialsTable extends Migration
     public function up()
     {
         Schema::create('receive_materials', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('receive_id')->constrained('receives')->onDelete('cascade');
-            $table->foreignId('material_id')->constrained('materials')->onDelete('cascade');
-            $table->float('costprice');
+            $table->bigIncrements('id');
+            $table->bigInteger('receive_id')->unsigned();
+            $table->bigInteger('material_id')->unsigned();
+            $table->float('price');
             $table->integer('quantity');
-            $table->float('subtotal');
             $table->timestamps();
         });
     }

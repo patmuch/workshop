@@ -22,7 +22,7 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>#</th>
                       <th>Type</th>
                       <th>Name</th>
                       <th>Email</th>
@@ -32,9 +32,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="user in users.data" :key="user.id">
+                     <tr v-for="(user,index) in users.data" :key="user.id">
 
-                      <td>{{user.id}}</td>
+                      <td>{{index + 1}}</td>
                       <td class="text-capitalize">{{user.type}}</td>
                       <td class="text-capitalize">{{user.name}}</td>
                       <td>{{user.email}}</td>
@@ -201,7 +201,7 @@
                                 this.form.delete('api/user/'+id).then(()=>{
                                         Swal.fire(
                                         'Deleted!',
-                                        'Your file has been deleted.',
+                                        'Employee record has been deleted.',
                                         'success'
                                         );
                                     // Fire.$emit('AfterCreate');

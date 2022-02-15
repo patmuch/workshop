@@ -14,13 +14,13 @@ class CreateSalesOrdersTable extends Migration
     public function up()
     {
         Schema::create('sales_orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('sorder_number')->unique;
-            $table->date('sorder_date');
-            $table->foreignId('customer_id')->constrained('customers');
-            $table->foreignId('product_id')->constrained('products');
+            $table->bigIncrements('id');
+            $table->string('order_number')->unique;
+            $table->date('order_date');
+            $table->bigInteger('customer_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
             $table->date('delivery_deadline');
-            $table->foreignId('order_status_id')->constrained('order_status');
+            $table->bigInteger('order_status_id')->unsigned();
             $table->timestamps();
         });
     }

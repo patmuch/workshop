@@ -22,7 +22,7 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>#</th>
                       <th>First Name</th>
                       <th>Last Name</th>
                       <th>Email</th>
@@ -31,9 +31,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="customer in customers.data" :key="customer.id">
+                     <tr v-for="(customer, index) in customers.data" :key="customer.id">
 
-                      <td>{{customer.id}}</td>
+                      <td>{{ index + 1}}</td>
                       <td>{{customer.fname}}</td>
                       <td>{{customer.lname}}</td>
                       <td>{{customer.email}}</td>
@@ -118,11 +118,11 @@
 </template>
 
 <script>
-    import VueTagsInput from '@johmun/vue-tags-input';
+  
 
     export default {
       components: {
-          VueTagsInput,
+         
         },
         data () {
             return {
@@ -138,7 +138,7 @@
                     
                 }),
                 
-                autocompleteItems: [],
+                
             }
         },
         methods: {
@@ -151,12 +151,12 @@
 
               this.$Progress.finish();
           },
-          loadCustomers(){
 
-            // if(this.$gate.isAdmin()){
+        loadCustomers()
+          {
               axios.get("api/customer").then(({ data }) => (this.customers = data.data));
-            // }
-          },
+          
+          }, 
           
           
 
@@ -214,8 +214,6 @@
                     title: response.data.message
                   });
                   this.$Progress.finish();
-                      //  Fire.$emit('AfterCreate');
-
                   this.loadCustomers();
               })
               .catch(() => {
@@ -238,10 +236,10 @@
                               this.form.delete('api/customer/'+id).then(()=>{
                                       Swal.fire(
                                       'Deleted!',
-                                      'Your file has been deleted.',
+                                      'Your Contact has been deleted.',
                                       'success'
                                       );
-                                  // Fire.$emit('AfterCreate');
+                                  
                                   this.loadCustomers();
                               }).catch((data)=> {
                                   Swal.fire("Failed!", data.message, "warning");
@@ -260,17 +258,7 @@
             this.loadCustomers();
             this.$Progress.finish();
         },
-        filters: {
-            truncate: function (text, length, suffix) {
-                return text.substring(0, length) + suffix;
-            },
-        },
-        computed: {
-          filteredItems() {
-            return this.autocompleteItems.filter(i => {
-              return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
-            });
-          },
-        },
+       
+       
     }
 </script>

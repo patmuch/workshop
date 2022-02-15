@@ -38,7 +38,7 @@ class SupplierController extends BaseController
     {
         $suppliers = $this->supplier->all();
 
-        return $this->sendResponse($suppliers, 'suppliers');
+        return $this->sendResponse($suppliers, 'suppliers list');
     }
 
 
@@ -53,6 +53,7 @@ class SupplierController extends BaseController
         'lname' => $request->get('lname'),
         'email' => $request->get('email'),
         'phone' => $request->get('phone'),
+        
         ]);
 
         return $this->sendResponse($supplier, 'Supplier Created Successfully');

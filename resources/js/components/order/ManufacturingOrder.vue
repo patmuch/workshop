@@ -5,9 +5,9 @@
 
           <div class="col-12">
         
-            <div class="card" v-if="$gate.isAdmin()">
+            <div class="card" >
               <div class="card-header">
-                <h3 class="card-title">Manufacturing Orders List</h3>
+                <h3 class="card-title">Manufacturing Orders</h3>
 
                 <div class="card-tools">
                   
@@ -23,24 +23,24 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Order ID</th>
+                      <th>Order #</th>
                       <th>Product</th>
                       <th>Order Date</th>
                       <th>Production Deadline</th>
+                      <th>Est.Time</th>
                      
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="manufacturingOrder in manufacturingOrders.data" :key="manufacturingOrder.id">
+                     <tr v-for="(manufacturingOrder, index) in manufacturingOrders.data" :key="manufacturingOrder.id">
 
-                      <td>{{manufacturingOrder.id}}</td>
-                      <td>{{manufacturingOrder.morder_number}}</td>
-                      <td class="text-capitalize">{{manufacturingOrder.product.name}}</td>
-                      <td>{{manufacturingOrder.morder_date}}</td>
-                      <td>{{manufacturingOrder.production_deadline}}</td>
-                      
-                      
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ manufacturingOrder.order_number }}</td>
+                      <td class="text-capitalize">{{ manufacturingOrder.product.name }}</td>
+                      <td>{{ manufacturingOrder.order_date }}</td>
+                      <td>{{ manufacturingOrder.production_deadline }}</td>
+                      <td>{{ moment(manufacturingOrder.production_deadline, "DD-MM-YYYY" ).diff(moment(manufacturingOrder.order_date, "DD-MM-YYYY"), 'days') }} <span> Day(s) </span> </td>
                       <td>
 
                         <a href="#" @click="editModal(manufacturingOrder)">
@@ -51,6 +51,7 @@
                             <i class="fa fa-trash red"></i>
                         </a>
                       </td>
+                      
                     </tr>
                   </tbody>
                 </table>
@@ -65,61 +66,59 @@
         </div>
 
 
-        <div v-if="!$gate.isAdmin()">
-            <not-found></not-found>
-        </div>
+       
 
         <!-- Modal -->
-        <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNew" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode">Create New Manufacturing Order</h5>
-                    <h5 class="modal-title" v-show="editmode">Update Manufacturing Order</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+        <div class= "modal fade" id= "addNew" tabindex= "-1" role= "dialog" aria-labelledby= "addNew" aria-hidden="true">
+            <div class= "modal-dialog" role="document">
+                <div class= "modal-content">
+                <div class= "modal-header">
+                    <h5 class= "modal-title" v-show= "!editmode">Create New Manufacturing Order</h5>
+                    <h5 class= "modal-title" v-show= "editmode">Update Manufacturing Order</h5>
+                    <button type= "button" class= "close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden= "true"> &times;</span>
                     </button>
                 </div>
 
                 <!-- <form @submit.prevent="createUser"> -->
 
-                <form @submit.prevent="editmode ? updateManufacturingOrder() : createManufacturingOrder()">
+                <form @submit.prevent= "editmode ? updateManufacturingOrder() : createManufacturingOrder()">
                     <div class="modal-body">
 
                         <div class="form-group">
 
-                            <label>Order ID</label>
-                            <input v-model="form.order_id" type="text" name="order_id" v-bind:placeholder="form.order_id"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('order_id') }">
-                            <has-error :form="form" field="order_id"></has-error>
+                            <label>Order #</label>
+                            <input v-model= "form.order_number" type="text" name="order_number" v-bind:placeholder="form.order_number"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('order_number') }">
+                            <has-error :form= "form" field="order_number"></has-error>
                             
                         </div>
 
                         <div class="form-group">
                             <label>Product Name</label>
-                            <select class="form-control" v-model="form.product_id">
+                            <select class="form-control" v-model= "form.product_id">
                               <option 
-                                  v-for="(cat,index) in products" :key="index"
-                                  :value="index"
-                                  :selected="index == form.product_id">{{ cat }}</option>
+                                  v-for= "(cat,index) in products" :key= "index"
+                                  :value= "index"
+                                  :selected= "index == form.product_id">{{ cat }}</option>
                             </select>
                          
                         </div> 
 
                         <div class="form-group">
                             <label>Order Date</label>
-                            <input v-model="form.order_date" type="date" name="order_date"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('order_date') }">
-                            <has-error :form="form" field="order_date"></has-error>
+                            <input v-model= "form.order_date" type="date" name= "order_date"
+                                class= "form-control" :class="{ 'is-invalid': form.errors.has('order_date') }">
+                            <has-error :form= "form" field="order_date"></has-error>
                             
                         </div>
 
                         <div class="form-group">
 
                             <label>Production Deadline</label>
-                            <input v-model="form.production_deadline" type="date" name="production_deadline"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('production_deadline') }">
-                            <has-error :form="form" field="production_deadline"></has-error>
+                            <input v-model= "form.production_deadline" type="date" name="production_deadline"
+                                class= "form-control" :class="{ 'is-invalid': form.errors.has('production_deadline') }">
+                            <has-error :form= "form" field="production_deadline"></has-error>
                             
                         </div>
 
@@ -129,8 +128,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                        <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                        <button v-show= "editmode" type="submit" class="btn btn-success">Update</button>
+                        <button v-show= "!editmode" type="submit" class="btn btn-primary">Create</button>
                     </div>
                   </form>
                 </div>
@@ -142,7 +141,9 @@
 
 <script>
 import moment from 'moment'
+
     export default {
+
         data () {
             return {
 
@@ -151,6 +152,7 @@ import moment from 'moment'
                 editmode: false,
                 products : {},
                 manufacturingOrders:{},
+
                 order_num: [{
                          nextOrderNumberAttribute:"",
                          nextOrderNumber:"",
@@ -161,7 +163,7 @@ import moment from 'moment'
                 form: new Form({
                     id : '',
                     product_id: '',
-                    order_id:'',
+                    order_number:'',
                     order_date:moment().format('YYYY-MM-DD').toString(),
                     production_deadline:moment().format('YYYY-MM-DD').toString()
                     
@@ -171,48 +173,64 @@ import moment from 'moment'
         },
         methods: {
 
-            getResults(page = 1) {
+            getResults(page = 1)
+            {
 
                   this.$Progress.start();
                   
-                  axios.get('/api/manufacturingOrder?page=' + page).then(({ data }) => (this.manufacturingOrders = data.data));
+                  axios.get('/api/manufacturingOrder?page=' + page)
+                  .then(({ data }) => (this.manufacturingOrders = data.data))
+                  .catch( () => {console.log("unable to load")});
 
                   this.$Progress.finish();
             },
 
-            loadManufacturingOrders(){
-              axios.get("/api/manufacturingOrder").then(({ data }) => (this.manufacturingOrders = data.data)).catch( () => {console.log("unable to load")});
+            loadManufacturingOrders()
+            {
+              axios.get("/api/manufacturingOrder")
+                   .then(({ data }) => (this.manufacturingOrders = data.data))
+                   .catch( () => {console.log("unable to load")});
+            },
+
+            loadOrderNumbers()
+            {
+              axios.get("/api/create/morder")
+                   .then(({ data }) => (this.order_num = data))
+                   .catch( () => {console.log("unable to load")});
             },
 
             
-            loadOrderNumbers(){
-              axios.get("/api/create/morder").then(({ data }) => (this.order_num = data));
-              },
 
-            loadProducts(){
-              axios.get("/api/product/list").then(({ data }) => (this.products = data.data));
-              },
+            loadProducts()
+            {
+              axios.get("/api/product/list")
+                   .then(({ data }) => (this.products = data.data))
+                   .catch( () => {console.log("unable to load")});
+            },
 
-            updateManufacturingOrder(){
+            updateManufacturingOrder()
+            {
                 this.$Progress.start();
                 this.form.put('/api/manufacturingOrder/'+this.form.id)
-                .then((response) => {
-                    // success
-                    $('#addNew').modal('hide');
-                    Toast.fire({
-                      icon: 'success',
-                      title: response.data.message
-                    });
-                    this.$Progress.finish();
+                         .then((response) => {
+                              // success
+                          $('#addNew').modal('hide');
+                          Toast.fire({
+                          icon: 'success',
+                          title: response.data.message
+                        });
+                this.$Progress.finish();
+
                         //  Fire.$emit('AfterCreate');
 
-                    this.loadManufacturingOrders();
+                this.loadManufacturingOrders();
                 })
                 .catch(() => {
                     this.$Progress.fail();
                 });
 
             },
+            
             editModal(manufacturingOrder){
                 this.editmode = true;
                 this.form.reset();
@@ -221,15 +239,15 @@ import moment from 'moment'
             },
             newModal(){
                 this.editmode = false;
-                this.form.reset();
-                this.form.order_id = this.order_num.nextOrderNumber;
+                this.form.order_number = this.order_num.nextOrderNumber;
                 $('#addNew').modal('show');
             },
 
           
             
             createManufacturingOrder(){
-
+                
+                this.$Progress.start();
                 this.form.post('/api/manufacturingOrder')
                 .then((response)=>{
                     $('#addNew').modal('hide');
@@ -238,8 +256,9 @@ import moment from 'moment'
                             icon: 'success',
                             title: response.data.message
                     });
-
+                    this.form.reset();
                     this.$Progress.finish();
+                  
                     this.loadManufacturingOrders();
                 })
                 .catch(()=>{
@@ -262,25 +281,32 @@ import moment from 'moment'
 
                       // Send request to the server
                         if (result.value) {
-                              this.form.delete('api/manufacturingOrder/'+id).then(()=>{
-                                      Swal.fire(
-                                      'Deleted!',
-                                      'Your row has been deleted.',
-                                      'success'
-                                      );
-                                  // Fire.$emit('AfterCreate');
-                                  this.loadManufacturingOrders();
-                              }).catch((data)=> {
-                                  Swal.fire("Failed!", data.message, "warning");
-                              });
-                        }
-                  })
-          },
+                              this.form.delete('api/manufacturingOrder/'+id)
+                                       .then(()=>{
+                                           Swal.fire( 'Deleted!',
+                                                      'The Manufacturing order has been deleted.',
+                                                      'success'
+                                                    );
+
+                                             // Fire.$emit('AfterCreate');
+                                            this.loadManufacturingOrders();
+                                        })
+                                        .catch((data)=> {
+                                                          Swal.fire("Failed!", data.message, "warning");
+                                                        });
+                                           }
+                                    })
+                     },
 
         },
-        mounted() {
+
+        mounted() 
+        {
             console.log('Component mounted.')
         },
+        
+
+
         created() {
 
             this.$Progress.start();

@@ -18,29 +18,29 @@ class UomsTableSeeder extends Seeder
         DB::table('uoms')->insert(
             [
                 [
-                    'name' => 'CM',
-                    'description' => 'CentiMetre',
+                    'name' => 'Pcs',
+                    'description' => 'Pieces',
                 ],
+
+                [
+                    'name' => 'EA',
+                    'description' => 'Each',
+                ],
+			
                 [
                     'name' => 'M',
-                    'description' => 'Metre',
+                    'description' => 'Metres',
                 ],
                 [
                     'name' => 'L',
-                    'description' => 'Litre',
+                    'description' => 'Litres',
                 ],
                 [
                     'name' => 'KG',
                     'description' => 'Kilogram',
                 ],
-                [
-                    'name' => 'G',
-                    'description' => 'Gram',
-                ],
-                [
-                    'name' => 'P',
-                    'description' => 'Pounds',
-                ],
+                
+              
             ]
         );
     }

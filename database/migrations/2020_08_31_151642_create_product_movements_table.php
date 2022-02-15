@@ -14,9 +14,9 @@ class CreateProductMovementsTable extends Migration
     public function up()
     {
         Schema::create('product_movement', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('movement_id')->constrained('movements')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->bigInteger('movement_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
             $table->integer('quantity');
             $table->timestamps();
         });

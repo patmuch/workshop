@@ -37,11 +37,10 @@ class BuildRequest extends FormRequest
     public function createRules(): array
     {
         return [
-            'product_id'  => 'required',
+            'buildable_id'    => 'required',
+            'buildable_type'   => 'required',
             'user_id'     => 'required ',
-            'customer_id' => 'required',
-            'production_time' => 'required ',
-            'notes' => 'required',
+            'notes'       => 'required',
             'production_stage_id' => 'required',
 
         ];
@@ -55,11 +54,10 @@ class BuildRequest extends FormRequest
     public function updateRules(): array
     {
         return [
-            'product_id'  => 'required',
+            'buildable_id'  => 'required',
+            'buildable_type' => 'required',
             'user_id'     => 'required ',
-            'customer_id' => 'required',
-            'production_time' => 'required ',
-            'notes' => 'required',
+            'notes'       => 'required',
             'production_stage_id' => 'required',
         ];
     }

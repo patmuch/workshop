@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Build;
+use App\Models\Material;
+use Illuminate\Http\Request;
 use App\Http\Requests\Builds\BuildRequest;
+
 
 class BuildController extends BaseController
 {
@@ -19,8 +22,18 @@ class BuildController extends BaseController
   
     public function index()
     {
-        $builds =  $this->build->latest()->with('product','user','productionStage','customer')->paginate(10);
-        return $this->sendResponse($builds, 'Productions list');
+        $builds =  $this->build->latest()->with('user','productionStage')->paginate(10);
+        return $this->sendResponse($builds, 'Productions queue');
+    }
+
+
+      
+    public function getBuilds()
+    {
+
+        $builds =  $this->build->all();               //pluck('buildable_id','id');
+        return $this->sendResponse($builds, 'Builds');
+  
     }
 
    
@@ -30,11 +43,10 @@ class BuildController extends BaseController
         
         $builds = $this->build->create([
 
-        'product_id' => $request->get('product_id'),
-        'user_id' => $request->get('user_id'),
-        'customer_id' => $request->get('customer_id'),
-        'production_time' => $request->get('production_time'),
-        'notes' => $request->get('notes'),
+        'buildable_id'        => $request->get('buildable_id'),
+        'buildable_type'      => $request->get('buildable_type'),
+        'user_id'             => $request->get('user_id'),
+        'notes'               => $request->get('notes'),
         'production_stage_id' => $request->get('production_stage_id'),      
         
         ]);
@@ -69,6 +81,45 @@ class BuildController extends BaseController
         $builds->delete();
 
         return $this->sendResponse($builds, 'Production build has been Deleted');
+    }
+
+
+    public function wipMaterial($id)
+    {
+
+        $order = $this->build->findOrFail($id);
+
+        $wipMat = $order->materials()->withPivot('quantity')->get();
+
+        return $this->sendResponse($wipMat, 'Build materials');
+    }
+
+
+
+    public function storeRecipe(Request $request)
+    {
+       
+       
+        $buildItems = $request->buildItems;
+
+        $build = $this->build->findOrFail($request->get('selectedOrder'));
+         
+             foreach ($buildItems as $buildItem)
+               {
+
+                  // update pivot table
+     
+                    
+                   $build->materials()->attach( ['material_id' => $buildItem['material_id']], ['quantity'=> $buildItem['quantity'] ] );
+
+                   Material::where('id', $buildItem['material_id'] )->increment('committed', $buildItem['quantity'] );
+
+                   Material::where('id', $buildItem['material_id'] )->decrement('quantity', $buildItem['quantity'] );
+ 
+                } 
+
+           return $this->sendResponse($build, 'Material allocation Successfully');
+
     }
 
 }

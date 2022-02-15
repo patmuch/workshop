@@ -19,8 +19,8 @@ class CreateProductsTable extends Migration
             $table->string('code')->unique();
             $table->longText('description')->nullable();
             $table->string('price');
-            $table->foreignId('stock_availability_id')->constrained('stock_availability')->onDelete('cascade');
-            $table->integer('category_id');
+            $table->bigInteger('stock_availability_id')->unsigned();
+            $table->bigInteger('category_id')->unsigned();
             $table->string('photo')->nullable();
             $table->timestamps();
             $table->softDeletes();

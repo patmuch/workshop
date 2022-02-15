@@ -66,11 +66,34 @@ Route::get('materialFetch/{id}', 'API\V1\MaterialController@fetch');
 Route::get('material/all', 'API\V1\MaterialController@fetchAll');
 
 Route::get('create/sorder', 'API\V1\SalesOrderController@create');
+Route::get('salesOrder/all', 'API\V1\SalesOrderController@fetchAll');
+
 Route::get('create/morder', 'API\V1\ManufacturingOrderController@create');
+
+Route::get('build/order', 'API\V1\BuildController@getBuilds');
+
+Route::post('build/material', 'API\V1\BuildController@storeRecipe');
+
+Route::get('wip/material/{id}', 'API\V1\BuildController@wipMaterial');
+
+Route::get('manufacturingOrder/all', 'API\V1\ManufacturingOrderController@fetchAll');
 
 Route::post('product/upload', 'API\V1\ProductController@upload');
 
+Route::post('receive/material', 'API\V1\ReceiveController@store');
+
 Route::get('search', 'API\V1\MaterialController@search');
+
+Route::get('dashboard/customer', 'API\V1\DashboardController@customer');
+Route::get('dashboard/sorder', 'API\V1\DashboardController@salesOrder');
+Route::get('dashboard/morder', 'API\V1\DashboardController@manufacturingOrder');
+Route::get('dashboard/corder', 'API\V1\DashboardController@customerOrder');
+Route::get('dashboard/wip', 'API\V1\DashboardController@workInProgess');
+Route::get('dashboard/production', 'API\V1\DashboardController@productionCount');
+Route::get('dashboard/blocked', 'API\V1\DashboardController@blocked');
+Route::get('dashboard/done', 'API\V1\DashboardController@done');
+Route::get('dashboard/stock', 'API\V1\DashboardController@stock');
+Route::get('dashboard/morderCount', 'API\V1\DashboardController@morderCount');
 
 Route::apiResources([
     'user'     =>            'API\V1\UserController',

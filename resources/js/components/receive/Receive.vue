@@ -13,14 +13,11 @@
                 <div class="card-header">
 
 
-                    <h3 class="card-title">Receive Raw Materials</h3>
+                    <h3 class="card-title">Receiving</h3>
 
                      <div class="card-tools">
                   
-                     <button type="button" class="btn btn-sm btn-primary" >
-                      <i class="fa fa-plus-square"></i>
-                      Check Material 
-                     </button>
+                    
                     </div>
 
                 </div> <!-- /.card-header -->
@@ -31,40 +28,25 @@
                          
 
 
-                      <form @submit.prevent="editmode ? updateReceive() : createReceive()">
+                      <form @submit.prevent= "createReceive()">
 
-                        <div class="form-group row mt-20">
-                           <div class="col-md-6">
-                           <!--    <v-select
-                                                                                                        
-                                                        :value="form.receivedItems" 
-                                                         label= "material_name"
-                                                         placeholder="--select products--"
-                                                         :options = "materialArray"
-                                                         :clearable = "true"
-                                                         :searchable= "true"
-                                                         :closeOnSelect= "true"
-                                                         @input="updateSelectedItems(receivedItems)" > 
-                                         
-                               </v-select>  -->
-                           </div>
-                        </div>                              
+                        
 
                         <div class="form-group row mt-20 ">
 
-                                <div class="col-sm-12">
+                                <div class="card">
 
                                     <div class="table-responsive">
 
-                                        <table class="table table-sm table-stripped table-bordered"  id="add-product">
+                                        <table class="table table-stripped table-bordered"  id="add-product">
                                             <thead>
                                                 <tr>
                                                   
-                                                  <th style="width: 40%;">Item</th>
-                                                  <th style="width: 12%;">Quantity</th>
-                                                  <th style="width: 20%;">UnitPrice</th>
-                                                  <th style="width: 20%;">Total</th>
-                                                  <th style="width: 8%;"></th>
+                                                  <th style = "width: 25em;" > Item Description </th>
+                                                  <th> Quantity </th>
+                                                  <th> UnitPrice </th>
+                                                  <th> Total </th>
+                                                  <th> </th>
                                                   
                                                 </tr>
                                             </thead>
@@ -72,10 +54,10 @@
                                                 <tr class="panel panel-default" v-for="(receivedItem, index) in form.receivedItems" :key="index">
                                                     
                                                     <!--<td><input type="text"  name="material_name" v-model="receiveItem.material_name"></td>  -->
-                                                    <td>
+                                                    <td >
                                                      <v-select
                                                                                                         
-                                                      
+                                                       
                                                          label= "material_name"
                                                          placeholder= "--select Items--"
                                                          :options = "materialArray"
@@ -87,10 +69,11 @@
                                                          > 
                                          
                                                     </v-select>
+
                                                     </td>
-                                                    <td><input type="number" name="qty_received"   v-model.number= "receivedItem.qty_received" ></td>
-                                                    <td><input type="number" name="unitPrice"      v-model.number= "receivedItem.unitPrice" ></td>
-                                                    <td><input type="text"   name="total" readonly v-model.number= "total[index]" ></td>
+                                                    <td><input class="form-control"  type="number" name="quantity"   v-model.number= "receivedItem.quantity" ></td>
+                                                    <td><input class="form-control"  type="number" name="price"      v-model= "receivedItem.price" @keyup=" priceFormat" ></td>
+                                                    <td> {{ total[index] | currency('Ksh') }} </td>
 
 
                                                     <td><button  class="btn btn-danger btn-sm" @click.prevent="deleteItem(index)">x</button></td> 
@@ -110,8 +93,8 @@
                             </div>
 
 
-                              <div class="row">
-
+                              <div class="form-group row mt-20">
+                               
                                 <div class="col-md-6 px-3">
 
                                     <fieldset class="scheduler-border">
@@ -157,10 +140,10 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="orderDate" class="col-5 col-form-label">Date <span>*</span> </label>
+                                            <label for="receiveDate" class="col-5 col-form-label">Date <span>*</span> </label>
                                             <div class="col-7">
                                                 <div class="input-group">
-                                                    <input class="form-control" placeholder="dd-mm-yyyy" type= "date" name="orderDate" v-model= "form.orderDate" >
+                                                    <input class="form-control" placeholder="dd-mm-yyyy" type= "date" name="receiveDate" v-model= "form.receiveDate" >
                                                    
                                                 </div>
                                             </div>
@@ -173,9 +156,9 @@
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Payment</legend>
                                         <div class="form-group row">
-                                            <label for="subTotal" class="col-5 col-form-label">Grand Total</label>
+                                            <label for="grandTotal" class="col-5 col-form-label">Grand Total</label>
                                             <div class="col-7">
-                                                <input type="text" class="form-control form-control-sm" name="grandTotal" v-model.number= "``grandTotal" readonly>
+                                                <input type="text" class="form-control " name="grandTotal" v-model.number= "  grandTotal " readonly>
                                             </div>
                                         </div>
 
@@ -188,10 +171,11 @@
 
                                     <div class="form-group row">
                                            <div class="col-md-6 px-3">
-                                              <button type="submit" class="btn btn-primary ">Submit</button>
+                                             
+                                              <button type="submit" class="btn btn-primary ">Receive</button>
                                            </div>
                                     </div>
-
+                             
                             </div> <!--end of row -->
 
     
@@ -237,13 +221,19 @@
 <script>
 import moment from 'moment';
 import { mapGetters, mapActions } from "vuex";
+
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+
+
+
 
 export default {
 name: "receive",
 components: {
+
         vSelect
+        
         },
         
 data(){
@@ -258,16 +248,17 @@ data(){
            
             receivedItems: [{
               id:'',
-              qty_received: '1',
-              unitPrice: '0',
-              total: '0',
+              quantity: '1',
+              price: '0.00',
+              total: '0.00',
               
             }],
           
             supplier_id: '',
             purchaseOrder: '',
-            orderDate:moment().format('YYYY-MM-DD').toString(),
-            grandTotal: '0',
+            receiveDate: moment().format('YYYY-MM-DD').toString(),
+            user_id: document.head.querySelector('meta[name="user_id"]').getAttribute('content'),
+            grandTotal: '0.00',
            
 
 
@@ -280,6 +271,26 @@ data(){
 
 methods:{
 ...mapActions(["fetchMaterials", "fetchSuppliers"]),
+
+
+  currencyFormat(value)
+    {
+        if (typeof value !== "number") {
+        return value;
+        }
+     const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'KSH',
+      minimumFractionDigits: 0
+    });
+    return formatter.format(value);
+    },
+
+
+    priceFormat(){
+
+      this.receivedItem.price = this.currencyFormat(this.receivedItem.price);
+    },
  
     loadMaterials(){
          
@@ -297,9 +308,9 @@ methods:{
     addRow() {
       this.form.receivedItems.push({
         id: "",
-        qty_received: "1",
-        unitPrice: "0",
-        total: "0",
+        quantity: "1",
+        price: "0.00",
+        total: "0.00",
        
         
       });
@@ -308,6 +319,39 @@ methods:{
     deleteItem(index) {
       this.form.receivedItems.splice(index, 1);
     },
+
+    createReceive(){
+
+              this.$Progress.start();
+
+              this.form.post('api/receive/material')
+              .then((data)=>{
+                if(data.data.success){
+                 
+                  Toast.fire({
+                        icon: 'success',
+                        title: data.data.message
+                    });
+                  this.$Progress.finish();
+                  this.form.reset();
+
+                } else {
+                  Toast.fire({
+                      icon: 'error',
+                      title: 'Some error occured! Please try again'
+                  });
+
+                  this.$Progress.failed();
+                }
+              })
+              .catch(()=>{
+
+                  Toast.fire({
+                      icon: 'error',
+                      title: 'Some error occured! Please try again2'
+                  });
+              })
+          }
 
     
 },
@@ -323,7 +367,7 @@ computed: {
 
      total() {
       return this.form.receivedItems.map((item) => {
-        return Number(item.qty_received * item.unitPrice)
+        return Number(item.quantity * item.price)
       });
     },
 
@@ -331,7 +375,7 @@ computed: {
     grandTotal() {
 
       let totalArray = this.form.receivedItems.map((item) => {
-        return Number(item.qty_received * item.unitPrice)
+        return Number(item.quantity * item.price)
       });
 
         return totalArray.reduce(( previousValue, currentValue ) => previousValue + currentValue, 0 )
@@ -339,6 +383,15 @@ computed: {
     },
 
     
+
+    },
+
+    watch:{
+/*
+      'receivedItem.price': function(val){
+        this.receivedItem.price = this.currencyFormat(val);
+      },
+*/
 
     },
  

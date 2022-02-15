@@ -30,11 +30,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="product in products.data" :key="product.id">
+                     <tr v-for= "product in products.data" :key= "product.id">
 
-                      <td>{{product.id}}</td>
-                      <td>{{product.name}}</td>
-                      <td>{{product.description | truncate(30, '...')}}</td>
+                      <td> {{ product.id }} </td>
+                      <td> {{ product.name }} </td>
+                      <td> {{ product.description | truncate(30, '...') }} </td>
                       <td>
                       </td>
                     </tr>
@@ -62,15 +62,15 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Name</label>
-                            <input v-model="form.name" type="text" name="name"
+                            <input v-model= "form.name" type= "text" name= "name"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                            <has-error :form="form" field="name"></has-error>
+                            <has-error :form= "form" field="name"></has-error>
                         </div>
                         <div class="form-group">
                             <label>Description</label>
-                            <input v-model="form.description" type="text" name="description"
+                            <input v-model= "form.description" type="text" name="description"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
-                            <has-error :form="form" field="description"></has-error>
+                            <has-error :form= "form" field="description"></has-error>
                         </div>
                     </div>
                     <div class="modal-footer">

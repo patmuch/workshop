@@ -21,7 +21,7 @@ class ProductController extends BaseController
     
     public function index()
     {
-        $products = $this->product->latest()->with('category', 'stockAvailability','tags')->paginate(10);
+        $products = $this->product->latest()->with('category', 'stockAvailability')->paginate(10);
 
         return $this->sendResponse($products, 'Product list');
     }
@@ -45,12 +45,6 @@ class ProductController extends BaseController
             'category_id' => $request->get('category_id'),
         ]);
 
-        // update pivot table
-        $tag_ids = [];
-        foreach ($request->get('tags') as $tag) {
-            $tag_ids[] = $tag['id'];
-        }
-        $product->tags()->sync($tag_ids);
 
         return $this->sendResponse($product, 'Product Created Successfully');
     }
@@ -69,13 +63,6 @@ class ProductController extends BaseController
         $product = $this->product->findOrFail($id);
 
         $product->update($request->all());
-
-        // update pivot table
-        $tag_ids = [];
-        foreach ($request->get('tags') as $tag) {
-            $tag_ids[] = $tag['id'];
-        }
-        $product->tags()->sync($tag_ids);
 
         return $this->sendResponse($product, 'Product Information has been updated');
     }

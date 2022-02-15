@@ -22,7 +22,7 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>#</th>
                       <th>First Name</th>
                       <th>Last Name</th>
                       <th>Email</th>
@@ -31,9 +31,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="supplier in suppliers.data" :key="supplier.id">
+                     <tr v-for="(supplier, index) in suppliers.data" :key="supplier.id">
 
-                      <td>{{supplier.id}}</td>
+                      <td>{{index + 1}}</td>
                       <td>{{supplier.fname}}</td>
                       <td>{{supplier.lname}}</td>
                       <td>{{supplier.email}}</td>
@@ -66,8 +66,8 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode">Create New Supplier</h5>
-                    <h5 class="modal-title" v-show="editmode">Edit Supplier</h5>
+                    <h5 class="modal-title" v-show= "!editmode"> Create New Supplier </h5>
+                    <h5 class="modal-title" v-show= "editmode"> Edit Supplier </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -77,13 +77,16 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>First Name</label>
-                            <input v-model="form.fname" type="text" name="fname"
+
+                            <input v-model= "form.fname" type="text" name="fname"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('fname') }">
-                            <has-error :form="form" field="fname"></has-error>
+
+                            <has-error :form= "form" field="fname"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Last Name</label>
+
                             <input v-model="form.lname" type="text" name="lname"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('lname') }">
                             <has-error :form="form" field="lname"></has-error>
@@ -110,8 +113,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                        <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                        <button v-show= "editmode" type="submit" class="btn btn-success">Update</button>
+                        <button v-show= "!editmode" type="submit" class="btn btn-primary">Create</button>
                     </div>
                   </form>
                 </div>
@@ -122,12 +125,10 @@
 </template>
 
 <script>
-    import VueTagsInput from '@johmun/vue-tags-input';
+  
 
     export default {
-      components: {
-          VueTagsInput,
-        },
+     
         data () {
             return {
                 editmode: false,
@@ -141,7 +142,7 @@
                     
                 }),
                 
-                autocompleteItems: [],
+               
             }
         },
         methods: {
@@ -240,7 +241,7 @@
                               this.form.delete('api/supplier/'+id).then(()=>{
                                       Swal.fire(
                                       'Deleted!',
-                                      'Your file has been deleted.',
+                                      'Your Contact has been deleted.',
                                       'success'
                                       );
                                   // Fire.$emit('AfterCreate');
@@ -261,18 +262,8 @@
             this.loadSuppliers();
             this.$Progress.finish();
         },
-        filters: {
-            truncate: function (text, length, suffix) {
-                return text.substring(0, length) + suffix;
-            },
-        },
-        computed: {
-          filteredItems() {
-            return this.autocompleteItems.filter(i => {
-              return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
-            });
-          },
-        },
+       
+      
     }
 </script>
 

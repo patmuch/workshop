@@ -25,14 +25,20 @@ class ManufacturingOrderController extends BaseController
         return $this->sendResponse($manufacturingOrder, 'Manufacturing Order list');
     }
 
+    public function fetchAll()
+    {
+        $manufacturingOrder =  $this->manufacturingOrder->all();
+        return $this->sendResponse($manufacturingOrder, 'Manufacturing Orders ');
+    }
+
     public function create(Request $request)
     {
         
-        $morder_prefix = 'MO';
+        $order_prefix = 'MO';
         $order_num_auto_generate = 'True';
 
         $nextOrderNumberAttribute = null;
-        $nextOrderNumber = ManufacturingOrder::getNextOrderNumber($morder_prefix);
+        $nextOrderNumber = ManufacturingOrder::getNextOrderNumber($order_prefix);
 
         if ($order_num_auto_generate == 'True') {
             $nextOrderNumberAttribute = $nextOrderNumber;
@@ -40,24 +46,24 @@ class ManufacturingOrderController extends BaseController
 
         return response()->json([
             'nextOrderNumberAttribute' => $nextOrderNumberAttribute,
-            'nextOrderNumber' => $morder_prefix.'-'.$nextOrderNumber,
-            'morder_prefix' => $morder_prefix
+            'nextOrderNumber' => $order_prefix.'-'.$nextOrderNumber,
+            'order_prefix' => $order_prefix
         ]);
     }
 
   
     public function store(Request $request)
     {
-        $morder_number = explode("-",$request->order_id);
-        $number_attributes['morder_number'] = $morder_number[0].'-'.sprintf('%06d', intval($morder_number[1]));
+        $order_number = explode("-",$request->order_number);
+        $number_attributes['order_number'] = $order_number[0].'-'.sprintf('%06d', intval($order_number[1]));
 
         Validator::make($number_attributes, [
-            'morder_number' => 'required|unique:manufacturing_orders,morder_number'
+            'order_number' => 'required|unique:manufacturing_orders,order_number'
         ])->validate();
 
        //$morder_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
        
-        $morder_date = Carbon::parse($request->order_date)->format('d/m/Y');
+        $order_date = Carbon::parse($request->order_date)->format('d/m/Y');
 
        //$production_deadline = Carbon::createFromFormat('d/m/Y', $request->production_deadline);
 
@@ -67,8 +73,8 @@ class ManufacturingOrderController extends BaseController
         
         $manufacturingOrder = $this->manufacturingOrder->create([
 
-        'morder_number' => $number_attributes['morder_number'],
-        'morder_date' => $morder_date,
+        'order_number' => $number_attributes['order_number'],
+        'order_date' => $order_date,
         'product_id' => $request->get('product_id'),
         'production_deadline' => $production_deadline,
         

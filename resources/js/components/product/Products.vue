@@ -22,7 +22,7 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>#</th>
                       <th>Name</th>
                       <th>ItemCode</th>
                       <th>Description</th>
@@ -33,14 +33,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="product in products.data" :key="product.id">
+                     <tr v-for="(product, index ) in products.data" :key="product.id">
 
-                      <td>{{product.id}}</td>
+                      <td>{{index + 1}}</td>
                       <td>{{product.name}}</td>
                       <td>{{product.code}}</td>
                       <td>{{product.description | truncate(30, '...')}}</td>
                       <td>{{product.category.name}}</td>
-                      <td>{{product.price}}</td>
+                      <td>{{product.price | currency('Ksh')}}</td>
                       <td> <span :class= "{
                                               'badge badge-success': product.stock_availability.name === 'In stock',
                                               'badge badge-danger': product.stock_availability.name === 'Not available',
@@ -94,69 +94,61 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Name</label>
-                            <input v-model="form.name" type="text" name="name"
+                            <input v-model= "form.name" type="text" name= "name"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                            <has-error :form="form" field="name"></has-error>
+                            <has-error :form= "form" field="name"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>ItemCode</label>
-                            <input v-model="form.code" type="text" name="code"
+                            <input v-model= "form.code" type="text" name="code"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('code') }">
-                            <has-error :form="form" field="code"></has-error>
+                            <has-error :form= "form" field="code"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Description</label>
-                            <input v-model="form.description" type="text" name="description"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
-                            <has-error :form="form" field="description"></has-error>
+                            <input v-model= "form.description" type="text" name="description"
+                                class="form-control" :class= "{ 'is-invalid': form.errors.has('description') }">
+                            <has-error :form= "form" field="description"></has-error>
                         </div>
+
                         <div class="form-group">
                             <label>Price</label>
-                            <input v-model="form.price" type="text" name="price"
+                            <input v-model= "form.price" type="text" name="price"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('price') }">
-                            <has-error :form="form" field="price"></has-error>
+                            <has-error :form= "form" field="price"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Availability</label>
-                            <select class="form-control" v-model="form.stock_availability_id">
+                            <select class="form-control" v-model= "form.stock_availability_id">
                               <option 
-                                  v-for="(cat,index) in availability" :key="index"
-                                  :value="index"
-                                  :selected="index == form.stock_availability_id">{{ cat }}</option>
+                                  v-for= "(cat,index) in availability" :key= "index"
+                                  :value= "index"
+                                  :selected= "index == form.stock_availability_id" > {{ cat }} </option>
                             </select>
-                            <has-error :form="form" field="stock_availability_id"></has-error>
+                            <has-error :form= "form" field="stock_availability_id" ></has-error>
                         </div>
 
 
                         <div class="form-group">
 
                             <label>Category</label>
-                            <select class="form-control" v-model="form.category_id">
+                            <select class="form-control" v-model= "form.category_id">
                               <option 
-                                  v-for="(cat,index) in categories" :key="index"
-                                  :value="index"
-                                  :selected="index == form.category_id">{{ cat }}</option>
+                                  v-for= "(cat,index) in categories" :key= "index"
+                                  :value= "index"
+                                  :selected= "index == form.category_id">{{ cat }}</option>
                             </select>
-                            <has-error :form="form" field="category_id"></has-error>
+                            <has-error :form= "form" field= "category_id"></has-error>
                         </div>
-                        <div class="form-group">
-                            <label>Tags</label>
-                            <vue-tags-input
-                              v-model="form.tag"
-                              :tags="form.tags"
-                              :autocomplete-items="filteredItems"
-                              @tags-changed="newTags => form.tags = newTags"
-                            />
-                            <has-error :form="form" field="tags"></has-error>
-                        </div>
+                        
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                        <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                    <div class= "modal-footer">
+                        <button type= "button" class= "btn btn-secondary" data-dismiss= "modal">Close</button>
+                        <button v-show= "editmode" type="submit" class= "btn btn-success">Update</button>
+                        <button v-show= "!editmode" type="submit" class= "btn btn-primary">Create</button>
                     </div>
                   </form>
                 </div>
@@ -167,11 +159,11 @@
 </template>
 
 <script>
-    import VueTagsInput from '@johmun/vue-tags-input';
+   
 
     export default {
       components: {
-          VueTagsInput,
+       
         },
         data () {
             return {
@@ -183,7 +175,6 @@
                     name: '',
                     code:'',
                     description: '',
-                    tags:  [],
                     photo: '',
                     category_id: '',
                     price: '',
@@ -192,7 +183,7 @@
                 }),
                 categories: [],
                 availability:[],
-                tag:  '',
+               
                 autocompleteItems: [],
             }
         },
@@ -206,33 +197,32 @@
 
               this.$Progress.finish();
           },
-          loadProducts(){
 
-            // if(this.$gate.isAdmin()){
+          loadProducts()
+          {
               axios.get("api/product").then(({ data }) => (this.products = data.data));
-            // }
+           
           },
-          loadCategories(){
+
+          loadCategories()
+          {
               axios.get("/api/category/list").then(({ data }) => (this.categories = data.data));
           },
 
-           loadAvailabilitys(){
+           loadAvailabilitys()
+           {
               axios.get("/api/availability/list").then(({ data }) => (this.availability = data.data));
-          },
+           },
 
-          loadTags(){
-              axios.get("/api/tag/list").then(response => {
-                  this.autocompleteItems = response.data.data.map(a => {
-                      return { text: a.name, id: a.id };
-                  });
-              }).catch(() => console.warn('Oh. Something went wrong'));
-          },
-          editModal(product){
+        
+          editModal(product)
+          {
               this.editmode = true;
               this.form.reset();
               $('#addNew').modal('show');
               this.form.fill(product);
           },
+
           newModal(){
               this.editmode = false;
               this.form.reset();
@@ -322,26 +312,16 @@
             
         },
         created() {
-            this.$Progress.start();
 
+            this.$Progress.start();
             this.loadProducts();
             this.loadCategories();
             this.loadAvailabilitys();
-            this.loadTags();
-
             this.$Progress.finish();
         },
-        filters: {
-            truncate: function (text, length, suffix) {
-                return text.substring(0, length) + suffix;
-            },
-        },
+       
         computed: {
-          filteredItems() {
-            return this.autocompleteItems.filter(i => {
-              return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
-            });
-          },
+         
         },
     }
 </script>

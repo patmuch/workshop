@@ -14,10 +14,10 @@ class CreateManufacturingOrdersTable extends Migration
     public function up()
     {
         Schema::create('manufacturing_orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('morder_number')->unique;
-            $table->date('morder_date');
-            $table->foreignId('product_id')->constrained('products');
+            $table->bigIncrements('id');
+            $table->string('order_number')->unique;
+            $table->date('order_date');
+            $table->bigInteger('product_id')->unsigned();
             $table->date('production_deadline');
             $table->timestamps();
         });

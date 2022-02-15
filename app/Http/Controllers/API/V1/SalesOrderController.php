@@ -25,13 +25,21 @@ class SalesOrderController extends BaseController
         return $this->sendResponse($salesOrder, 'SalesOrder list');
     }
 
+      
+    public function fetchAll()
+    {
+
+        $salesOrder =  $this->salesOrder->all();
+        return $this->sendResponse($salesOrder, 'SalesOrders');
+    }
+
     public function create()
     {
-        $sorder_prefix = 'SO';
+        $order_prefix = 'SO';
         $order_num_auto_generate = 'True';
 
         $nextOrderNumberAttribute = null;
-        $nextOrderNumber = SalesOrder::getNextOrderNumber($sorder_prefix);
+        $nextOrderNumber = SalesOrder::getNextOrderNumber($order_prefix);
 
         if ($order_num_auto_generate == 'True') {
             $nextOrderNumberAttribute = $nextOrderNumber;
@@ -39,8 +47,8 @@ class SalesOrderController extends BaseController
    
         return response()->json([
             'nextOrderNumberAttribute' => $nextOrderNumberAttribute,
-            'nextOrderNumber' => $sorder_prefix.'-'.$nextOrderNumber,
-            'sorder_prefix' => $sorder_prefix
+            'nextOrderNumber' => $order_prefix.'-'.$nextOrderNumber,
+            'order_prefix' => $order_prefix
         ]);
     }
 
@@ -51,27 +59,27 @@ class SalesOrderController extends BaseController
     {
 
         
-        $sorder_number = explode( "-", $request->order_id );
-        $number_attributes['sorder_number'] = $sorder_number[0].'-'.sprintf('%06d', intval($sorder_number[1]));
+        $order_number = explode( "-", $request->order_number );
+        $number_attributes['order_number'] = $order_number[0].'-'.sprintf('%06d', intval($order_number[1]));
 
         Validator::make($number_attributes, [
-           'sorder_number' => 'required|unique:sales_orders,sorder_number'
+           'order_number' => 'required|unique:sales_orders,order_number'
         ])->validate();
      
-        $sorder_date = Carbon::parse($request->order_date)->format('d/m/Y');
-       // $sorder_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
+        $order_date = Carbon::parse($request->order_date)->format('d/m/Y');
+       // $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
 
         $delivery_deadline = Carbon::parse($request->delivery_deadline)->format('d/m/Y');
         //$delivery_deadline = Carbon::createFromFormat('d/m/Y', $request->delivery_deadline);
 
         $salesOrder = $this->salesOrder->create([
 
-            'sorder_number'      =>    $number_attributes['sorder_number'],
-            'sorder_date'        =>    $sorder_date,
+            'order_number'       =>    $number_attributes['order_number'],
+            'order_date'         =>    $order_date,
             'customer_id'        =>    $request->get('customer_id'),
             'product_id'         =>    $request->get('product_id'),
             'delivery_deadline'  =>    $delivery_deadline,
-            'order_status_id'    =>    $request->get('status_id'),
+            'order_status_id'    =>    $request->get('order_status_id'),
         ]);
 
         return $this->sendResponse($salesOrder, 'Sales Order Created Successfully');

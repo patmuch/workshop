@@ -15,15 +15,9 @@ class Material extends Model
      */
 
     protected $fillable = [
-        'material_name', 'material_code','description', 'reorder_level','costprice','quantity', 'material_category_id', 'uom_id',
+        'material_name', 'material_code','description', 'reorder_level','costprice','quantity', 'committed', 'material_category_id', 'uom_id',
     ];
 
-
- 
-   /* public function builds()
-    {
-        return $this->belongsToMany('App\Build')->using('App\BuildMaterial');
-    } */
 
     public function materialCategory()
     {
@@ -37,8 +31,8 @@ class Material extends Model
 
     public function receives()
     {
-        return $this->belongsToMany('App\Models\Receive','receive_material')
-                    ->withPivot(['receive_id','material_id','costprice','quantity','subtotal'])
+        return $this->belongsToMany('App\Models\Receive','receive_materials')
+                    ->withPivot(['receive_id','material_id','price','quantity'])
                     ->withTimestamps();
     }  
    
@@ -50,4 +44,12 @@ class Material extends Model
                     ->withPivot(['material_id','movement_id','quantity'])
                     ->withTimestamps();
     } 
+
+
+    public function builds()
+    {
+        return $this->belongsToMany('App\Models\Build','build_materials')
+                    ->withPivot(['build_id','material_id','quantity'])
+                    ->withTimestamps();
+    }  
 }

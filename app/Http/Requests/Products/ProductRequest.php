@@ -43,7 +43,7 @@ class ProductRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric',
             'quantity' => 'numeric',
-            'tags' => 'required|array',
+            
             // 'photo' => 'sometimes|files',
         ];
     }
@@ -62,7 +62,7 @@ class ProductRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric',
             'quantity' => 'numeric',
-            'tags' => 'required|array',
+            
             // 'photo' => 'sometimes|files',
         ];
     }

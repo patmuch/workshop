@@ -10,8 +10,8 @@ class SalesOrder extends Model
 {
     
     protected $fillable = [
-        'sorder_number',
-        'sorder_date',
+        'order_number',
+        'order_date',
         'customer_id',
         'product_id',
         'delivery_deadline',
@@ -29,7 +29,7 @@ class SalesOrder extends Model
     public static function getNextOrderNumber($value)
     {
         // Get the last created order
-        $lastOrder = SalesOrder::where('sorder_number', 'LIKE', $value . '-%')
+        $lastOrder = SalesOrder::where('order_number', 'LIKE', $value . '-%')
                     ->orderBy('created_at', 'desc')
                     ->first();
 
@@ -39,7 +39,7 @@ class SalesOrder extends Model
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$lastOrder->sorder_number);
+            $number = explode("-",$lastOrder->order_number);
             $number = $number[1];
         }
         // If we have ORD000001 in the database then we only want the number
@@ -69,33 +69,41 @@ class SalesOrder extends Model
 
     public function getOrderNumAttribute()
     {
-        $position = $this->strposX($this->sorder_number, "-", 1) + 1;
-        return substr($this->sorder_number, $position);
+        $position = $this->strposX($this->order_number, "-", 1) + 1;
+        return substr($this->order_number, $position);
     }
 
     public function getOrderPrefixAttribute ()
     {
-        $prefix = explode("-", $this->sorder_number)[0];
+        $prefix = explode("-", $this->order_number)[0];
         return $prefix;
     }
 
 
-    public function product(){
+    public function product()
+    {
 
         return $this->belongsTo('App\Models\Product');
                             
     }
 
-
-    public function customer(){
+    public function customer()
+    {
 
         return $this->belongsTo('App\Models\Customer');
 
     }
 
-    public function orderStatus(){
+    public function orderStatus()
+    {
 
         return $this->belongsTo('App\Models\OrderStatus');
 
     }
+
+    public function build()
+    {
+        return $this->morphOne('App\Models\Build', 'buildable');
+    }
+
 }

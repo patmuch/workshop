@@ -14,9 +14,9 @@ class CreateBuildMaterialsTable extends Migration
     public function up()
     {
         Schema::create('build_materials', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('build_id')->constrained('builds')->onDelete('cascade');
-            $table->foreignId('material_id')->constrained('materials')->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->bigInteger('build_id')->unsigned();
+            $table->bigInteger('material_id')->unsigned();
             $table->integer('quantity');
             $table->timestamps();
         });

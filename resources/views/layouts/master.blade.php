@@ -6,10 +6,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="user_id"    content="{{ Auth::user()->id }}">
 
   <title>{{ config('app.name', 'Laravel') }}</title>
   
-
+  <link rel="icon" type="image/png" href="{{ asset('favicon.png')}}"/>
   <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 </head>
 <body class="hold-transition sidebar-mini">
@@ -108,10 +109,10 @@
   <footer class="main-footer">
     {{-- To the right --}}
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.0.0
+      <b>Version</b> 1.0.0
     </div>
     {{-- Default to the left --}}
-    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2014-2022 <a href="#">Patmuch</a>.</strong> All rights reserved.
   </footer>
 </div>
 {{-- ./wrapper --}}

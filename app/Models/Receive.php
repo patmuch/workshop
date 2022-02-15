@@ -6,20 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Receive extends Model
 {
-     protected $fillable = ['receive_date, supplier_id','user_id','payment_id','grandtotal','tax','discount','amount','due'];
+    protected $fillable = ['receive_date', 'purchase_order', 'supplier_id','user_id'];
 
     public function materials()
     {
         return $this->belongsToMany('App\Models\Material','receive_materials')
-                    ->withPivot(['receive_id','material_id','costprice','quantity','subtotal'])
+                    ->withPivot(['receive_id','material_id','price','quantity'])
                     ->withTimestamps();
     }
 
 
-    public function paymentType()
-    {
-        return $this->belongsTo('App\Models\PaymentType');
-    }
 
     public function supplier()
     {

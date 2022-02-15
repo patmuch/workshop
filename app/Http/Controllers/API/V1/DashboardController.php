@@ -2,18 +2,16 @@
 
 
 namespace App\Http\Controllers\API\V1;
+use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
 use App\Models\Build;
-use App\Models\Supplier;
 use App\Models\ManufacturingOrder;
 use App\Models\SalesOrder;
-use App\Models\Product;
+
 
 class DashboardController extends BaseController
 {
    
-
-  
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -21,53 +19,88 @@ class DashboardController extends BaseController
     }
 
   
-    public function index()
+    public function customer()
     {
-        $customers =  $this->customer->latest()->paginate(10);
-        return $this->sendResponse($customers, 'Customers list');
+        $customer = Customer::count();
+        return $this->sendResponse($customer, 'total customers');
     }
 
-    public function list()
-    {
-        $customers = $this->customer->pluck('fname', 'id');
 
-        return $this->sendResponse($customers, 'Customers list');
+
+    public function salesOrder()
+    {
+        $salesOrder = SalesOrder::latest()->with('customer','product','orderStatus')->take(5)->get();
+        
+        return $this->sendResponse($salesOrder, 'SalesOrder list');
     }
 
-    public function customers()
-    {
-        $customers = $this->customer->pluck('fname', 'id');
 
-        return $this->sendResponse($customers, 'Customers list');
+    public function manufacturingOrder()
+    {
+        $manufacturingOrder = ManufacturingOrder::latest()->with('product')->take(5)->get();
+        return $this->sendResponse($manufacturingOrder, 'Manufacturing Order');
     }
 
-    public function suppliers()
-    {
-        $customers = $this->customer->pluck('fname', 'id');
 
-        return $this->sendResponse($customers, 'Customers list');
+
+
+    public function customerOrder()
+    {
+        $customerOrder = salesOrder::count();
+
+        return $this->sendResponse($customerOrder, 'Total Customers Order');
     }
 
-    public function builds()
-    {
-        $customers = $this->customer->pluck('fname', 'id');
+   
 
-        return $this->sendResponse($customers, 'Customers list');
+    public function stock()
+    {
+         $stock = DB::table('materials')->select(DB::raw('SUM(quantity*costprice)AS total'))
+         ->first();
+
+        return $this->sendResponse( $stock, 'Stock value');
     }
 
-    public function salesOrders()
-    {
-        $customers = $this->customer->pluck('fname', 'id');
+    public function productionCount(){
 
-        return $this->sendResponse($customers, 'Customers list');
+        $prodCount = Build::count();
+
+        return  $this->sendResponse( $prodCount, 'total builds');
+
     }
 
-    public function manufacturingOrders()
-    {
-        $customers = $this->customer->pluck('fname', 'id');
+    public function workInProgess(){
 
-        return $this->sendResponse($customers, 'Customers list');
+        $wip = Build::where('production_stage_id', 1)->count();
+
+        return  $this->sendResponse( $wip, 'total work-in-progess');
+
     }
+
+    public function blocked(){
+
+        $blocked = Build::where('production_stage_id', 4)->count();
+
+        return  $this->sendResponse( $blocked, 'total blocked');
+
+    }
+
+    public function done(){
+
+        $done = Build::where('production_stage_id', 2)->count();
+
+        return  $this->sendResponse( $done, 'total done');
+
+    }
+
+    public function morderCount()
+    {
+        $morder = manufacturingOrder::count();
+
+        return $this->sendResponse($morder, 'Total manufacturing Order');
+    }
+
+
 
   
     

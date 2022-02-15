@@ -13,7 +13,7 @@
                   
                   <button type="button" class="btn btn-sm btn-primary" @click="newModal">
                       <i class="fa fa-plus-square"></i>
-                      Build New
+                      Schedule Production
                   </button>
                 </div>
               </div>
@@ -22,25 +22,26 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Product Name</th>
+                      <th>#</th>
+                      <th>Order #</th>
+                      <th>Order Type</th>
                       <th>Technician</th>
                       <th>Notes</th>
-                      <th>Est.Time</th>
-                      <th>Customer </th>
+                      
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="build in builds.data" :key="build.id">
+                     <tr v-for="(build, index) in builds.data" :key="build.id">
 
-                      <td>{{build.id}}</td>
-                      <td>{{build.product.name}}</td>
+                      <td>{{ index + 1}}</td>
+                      <td>{{build.buildable_id}}</td>
+                      <td>{{build.buildable_type}}</td>
                       <td>{{build.user.name}}</td>
-                      <td>{{build.notes | truncate(30, '...')}}</td>
-                      <td>{{build.production_time}}</td>
-                      <td>{{build.customer.fname}}</td>
+                      <td>{{build.notes | truncate(40, '...')}}</td>
+                     
+                      
                       <td>
                         <span  :class ="{
                                               'badge badge-success': build.production_stage.name === 'Done',
@@ -79,75 +80,90 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode">Build New Product</h5>
+                    <h5 class="modal-title" v-show="!editmode">Schedule Production</h5>
                     <h5 class="modal-title" v-show="editmode">Edit production</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
+
                 <form @submit.prevent="editmode ? updateBuild() : createBuild()">
+
                     <div class="modal-body">
+
                         <div class="form-group">
-                          <label>Product</label>
-                            <select class="form-control" v-model="form.product_id">
+
+                          <label>Order Type</label>
+
+                            <select class="form-control" v-model= "form.buildable_type">
+
                               <option 
-                                  v-for="(name,index) in products" :key="index"
-                                  :value="index"
-                                  :selected="index == form.product_id">{{ name }}</option>
+                                  v-for= "orderType in orderTypes" :key= "orderType.id"
+                                  :value= "orderType.name"
+                            
+                              >
+
+                               {{ orderType.name }} 
+
+                              </option>
+
                             </select>
-                            <has-error :form="form" field="product_id"></has-error>
+
+                           
                         </div>
-                        <div class="form-group">
-                            <label>Technician</label>
-                            <select class="form-control" v-model="form.user_id">
+
+
+                         <div class="form-group">
+
+                            <label> Order Id </label>
+
+                            <select class="form-control" v-model= "form.buildable_id">
                               <option 
-                                  v-for="(name,index) in users" :key="index"
-                                  :value="index"
-                                  :selected="index == form.user_id">{{ name }}</option>
+                                  v-for = "orderId in orderIds" :key= "orderId.id"
+                                  :value = "orderId.order_number"
+                                  
+                              >
+                                  
+                                {{ orderId.order_number }}
+
+                              </option>
+
                             </select>
-                            <has-error :form="form" field="user_id"></has-error>
+
+                           
+                        </div>
+
+                        <div class="form-group">
+                            <label> Technician </label>
+                            <select class="form-control" v-model= "form.user_id">
+                              <option 
+                                  v-for = "(name,index) in users" :key= "index"
+                                  :value = "index"
+                                  :selected = "index == form.user_id"> {{ name }} </option>
+                            </select>
+                           
                         </div>
 
                       
                         <div class="form-group">
                             <label>Notes</label>
-                            <input v-model="form.notes" type="text" name="notes"
+                            <input v-model= "form.notes" type="text" name="notes"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('notes') }">
-                            <has-error :form="form" field="notes"></has-error>
+                            
                         </div>
 
-                        <div class="form-group">
-                            <label>Est.Time</label>
-                            <input v-model="form.production_time" type="text" name="production_time"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('production_time') }">
-                            <has-error :form="form" field="production_time"></has-error>
-                        </div>
-                         
-                         
-                         <div class="form-group">
-
-                            <label>Customer</label>
-                            <select class="form-control" v-model="form.customer_id">
-                              <option 
-                                  v-for="(fname,index) in customers" :key="index"
-                                  :value="index"
-                                  :selected="index == form.customer_id">{{ fname }}</option>
-                            </select>
-                            <has-error :form="form" field="customer_id"></has-error>
-                        </div>
-                        
-
+                      
 
                         <div class="form-group">
                             <label>Status</label>
-                            <select class="form-control" v-model="form.production_stage_id">
+                            <select class="form-control" v-model= "form.production_stage_id">
                               <option 
-                                  v-for="(name,index) in productionStages" :key="index"
-                                  :value="index"
-                                  :selected="index == form.production_stage_id">{{ name }}</option>
+                                  v-for= "(name,index) in productionStages" :key= "index"
+                                  :value= "index"
+                                  :selected= "index == form.production_stage_id" > {{ name }} </option>
                             </select>
-                            <has-error :form="form" field="production_stage_id"></has-error>
+                            
                         </div>
 
              </div>
@@ -165,30 +181,42 @@
 </template>
 
 <script>
-    import VueTagsInput from '@johmun/vue-tags-input';
-
+  
     export default {
       components: {
-          VueTagsInput,
+         
         },
         data () {
             return {
                 editmode: false,
+
                 builds : {},
+
                 form: new Form({
                     id : '',
-                    product_id : '',
+                    buildable_type : '',
                     user_id: '',
                     notes: '',
-                    production_time: '',
-                    customer_id: '',
+                    buildable_id: '',
                     production_stage_id:'',   
                 }),
-                products: [],
+
+                orderTypes: [
+                  { 
+                    id: 1,
+                    name: 'Manufacturing Order'
+
+                  },
+                  { 
+                    id: 2,
+                    name: 'Sales Order'
+
+                  }
+                ],
+
                 users: [],
-                customers: [],
+                orderIds: [],
                 productionStages:[],
-             
                 autocompleteItems: [],
             }
         },
@@ -203,26 +231,22 @@
               this.$Progress.finish();
           },
           
-          loadBuilds(){
-
-            // if(this.$gate.isAdmin()){
+          loadBuilds()
+          {
               axios.get("api/build").then(({ data }) => (this.builds = data.data));
-            // }
           },
 
           loadProducts(){
               axios.get("/api/product/list").then(({ data }) => (this.products = data.data));
           },
 
-          loadCustomers(){
-              axios.get("/api/customer/list").then(({ data }) => (this.customers = data.data));
-          },
-
-          loadUsers(){
+          loadUsers()
+          {
               axios.get("/api/user/list").then(({ data }) => (this.users = data.data));
           },
 
-          loadStatus(){
+          loadStatus()
+          {
               axios.get("/api/status/list").then(({ data }) => (this.productionStages = data.data));
           },
        
@@ -232,11 +256,13 @@
               $('#addNew').modal('show');
               this.form.fill(build);
           },
+
           newModal(){
               this.editmode = false;
               this.form.reset();
               $('#addNew').modal('show');
           },
+
           createBuild(){
               this.$Progress.start();
 
@@ -269,7 +295,9 @@
                   });
               })
           },
-          updateBuild(){
+          
+          updateBuild()
+          {
               this.$Progress.start();
               this.form.put('api/build/'+this.form.id)
               .then((response) => {
@@ -289,7 +317,9 @@
               });
 
           },
-          deleteBuild(id){
+
+          deleteBuild(id)
+          {
               Swal.fire({
                   title: 'Are you sure?',
                   text: "You won't be able to revert this!",
@@ -321,27 +351,49 @@
             
         },
         created() {
+
             this.$Progress.start();
             this.loadBuilds();
-            this.loadProducts();
             this.loadUsers();
-            this.loadCustomers();
             this.loadStatus();
-           
-
             this.$Progress.finish();
         },
+
         filters: {
             truncate: function (text, length, suffix) {
                 return text.substring(0, length) + suffix;
             },
         },
+
         computed: {
+
           filteredItems() {
             return this.autocompleteItems.filter(i => {
               return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
             });
-          },
+          }, 
         },
+
+        watch: {
+
+          'form.buildable_type': function(){
+
+             if(this.form.buildable_type === 'Manufacturing Order')
+             {
+
+              axios.get("/api/manufacturingOrder/all")
+                   .then(({ data }) => (this.orderIds = data.data));
+                 
+             }
+
+             else
+             {
+                axios.get("/api/salesOrder/all")
+                     .then(({ data }) => (this.orderIds = data.data));
+                       
+             }
+          },
+
+        }
     }
 </script>

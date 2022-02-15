@@ -9,8 +9,8 @@ class ManufacturingOrder extends Model
     protected $table ='manufacturing_orders';
 
     protected $fillable =[
-        'morder_number',
-        'morder_date',
+        'order_number',
+        'order_date',
         'product_id',
         'production_deadline'
         
@@ -25,7 +25,7 @@ class ManufacturingOrder extends Model
     public static function getNextOrderNumber($value)
     {
         // Get the last created order
-        $lastOrder = ManufacturingOrder::where('morder_number', 'LIKE', $value . '-%')
+        $lastOrder = ManufacturingOrder::where('order_number', 'LIKE', $value . '-%')
                     ->orderBy('created_at', 'desc')
                     ->first();
 
@@ -35,7 +35,7 @@ class ManufacturingOrder extends Model
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$lastOrder->morder_number);
+            $number = explode("-",$lastOrder->order_number);
             $number = $number[1];
         }
         // If we have ORD000001 in the database then we only want the number
@@ -66,13 +66,13 @@ class ManufacturingOrder extends Model
 
     public function getOrderNumAttribute()
     {
-        $position = $this->strposX($this->morder_number, "-", 1) + 1;
-        return substr($this->morder_number, $position);
+        $position = $this->strposX($this->order_number, "-", 1) + 1;
+        return substr($this->order_number, $position);
     }
 
     public function getOrderPrefixAttribute ()
     {
-        $prefix = explode("-", $this->morder_number)[0];
+        $prefix = explode("-", $this->order_number)[0];
         return $prefix;
     }
 

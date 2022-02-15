@@ -9,8 +9,8 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Production</span>
                             <span class="info-box-number">
-                            10
-                            <small>%</small>
+                            {{ production }}
+                           
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -24,7 +24,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Customer Orders</span>
-                            <span class="info-box-number">41</span>
+                            <span class="info-box-number">{{ customerOrders }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -40,8 +40,8 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Sold Items</span>
-                            <span class="info-box-number">760</span>
+                            <span class="info-box-text">manufacturing Order</span>
+                            <span class="info-box-number">{{ morderCount }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -54,7 +54,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Customers</span>
-                            <span class="info-box-number">2,000</span>
+                            <span class="info-box-number">{{ customers }}</span>
                         </div>
                     <!-- /.info-box-content -->
                     </div>
@@ -70,7 +70,7 @@
                     <!-- MAP & BOX PANE -->
                     <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Latest Sales Orders (Demo)</h3>
+                        <h3 class="card-title">Latest Sales Orders </h3>
 
                         <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -87,61 +87,36 @@
                         <table class="table m-0">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Item</th>
-                                    <th>Status</th>
-                                    <th>Popularity</th>
+                                    <th> Order ID </th>
+                                    <th> Item </th>
+                                    <th> Status </th>
+                                    <th> Customer </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                                    <td>Call of Duty IV</td>
-                                    <td><span class="badge badge-success">Shipped</span></td>
+                              
+                                <tr v-for="salesOrder in salesOrders" :key="salesOrder.id">
+
+                                    <td> {{ salesOrder.order_number}} </td>
+                                    <td> {{salesOrder.product.name}} </td>
                                     <td>
-                                        <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+                                        <span  :class ="{
+                                              'badge badge-success': salesOrder.order_status.name === 'Delivered',
+                                              'badge badge-danger': salesOrder.order_status.name === 'Shipping',
+                                              'badge badge-warning': salesOrder.order_status.name === 'Packaging',
+                                              'badge badge-info': salesOrder.order_status.name === 'Processing',
+                                             }"
+
+                                        > 
+                                            {{salesOrder.order_status.name}}
+                                            </span>
+                                 </td>
+                                    <td>
+                                      <div class="sparkbar" data-color="#f39c12" data-height="20">  {{ salesOrder.customer.fname}} {{ salesOrder.customer.lname}} </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                    <td>Samsung Smart TV</td>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                    <td>iPhone 6 Plus</td>
-                                    <td><span class="badge badge-danger">Delivered</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                    <td>Samsung Smart TV</td>
-                                    <td><span class="badge badge-info">Processing</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                    <td>Samsung Smart TV</td>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                    <td>iPhone 6 Plus</td>
-                                    <td><span class="badge badge-danger">Delivered</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                                    </td>
-                                </tr>
+            
+                           
                             </tbody>
                         </table>
                         </div>
@@ -162,7 +137,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Inventory</span>
-                    <span class="info-box-number">5,200</span>
+                    <span class="info-box-number">{{ stock.total | currency('Ksh') }}</span>
                 </div>
                 <!-- /.info-box-content -->
                 </div>
@@ -171,8 +146,8 @@
                 <span class="info-box-icon"><i class="far fa-heart"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Work in Progress</span>
-                    <span class="info-box-number">92,050</span>
+                    <span class="info-box-text">Work-in-Progress</span>
+                    <span class="info-box-number">{{ wip }}</span>
                 </div>
                 <!-- /.info-box-content -->
                 </div>
@@ -182,7 +157,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Blocked</span>
-                    <span class="info-box-number">114,381</span>
+                    <span class="info-box-number">{{ blocked }}</span>
                 </div>
                 <!-- /.info-box-content -->
                 </div>
@@ -192,7 +167,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Done</span>
-                    <span class="info-box-number">163,921</span>
+                    <span class="info-box-number">{{ done }}</span>
                 </div>
                 <!-- /.info-box-content -->
                 </div>
@@ -205,7 +180,7 @@
                     <!-- MAP & BOX PANE -->
                     <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Latest Manufacturing Orders (Demo)</h3>
+                        <h3 class="card-title">Latest Manufacturing Orders</h3>
 
                         <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -224,62 +199,29 @@
                                 <tr>
                                     <th>Order ID</th>
                                     <th>Item</th>
-                                    <th>Status</th>
-                                    <th>Popularity</th>
+                                    <th>Order-date</th>
+                                    <th>Delivery-date </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                                    <td>Call of Duty IV</td>
-                                    <td><span class="badge badge-success">Shipped</span></td>
+                                <tr v-for="manufacturingOrder in manufacturingOrders" :key="manufacturingOrder.id">
+
+                                    <td>{{ manufacturingOrder.order_number }}</td>
+                                    <td>{{ manufacturingOrder.product.name }}</td>
                                     <td>
-                                        <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+                                        <span class="badge badge-success">
+                                              {{manufacturingOrder.order_date}}
+                                            </span>
+                                    </td>
+                                    <td>
+                                        <div class="sparkbar" data-color="#00a65a" data-height="20">{{ manufacturingOrder.production_deadline }} </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                    <td>Samsung Smart TV</td>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                    <td>iPhone 6 Plus</td>
-                                    <td><span class="badge badge-danger">Delivered</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                    <td>Samsung Smart TV</td>
-                                    <td><span class="badge badge-info">Processing</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                    <td>Samsung Smart TV</td>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                    <td>iPhone 6 Plus</td>
-                                    <td><span class="badge badge-danger">Delivered</span></td>
-                                    <td>
-                                        <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                                    </td>
-                                </tr>
+                               
                             </tbody>
                         </table>
                         </div>
+
                     </div>
                 <!-- /.card-body -->
                 </div>
@@ -297,6 +239,118 @@
 
 <script>
     export default {
+
+        data(){
+
+             return {
+
+                production : '0',
+                customerOrders : '0',
+                customers: "0",
+                stock: "0",
+                wip: "0",
+                blocked: "0",
+                done: "0",
+                salesOrders: "0",
+                manufacturingOrders: '0',
+                morderCount: '0'
+
+            }
+
+        },
+
+        methods: {
+
+            loadSalesOrder(){
+
+                  axios.get("api/dashboard/sorder")
+                       .then(({ data }) => (this.salesOrders = data.data));
+              
+
+            },
+
+            loadManufacturingOrder(){
+
+                    axios.get("api/dashboard/morder")
+                         .then(({ data }) => (this.manufacturingOrders = data.data));
+            },
+
+            loadCustomerOrder(){
+
+                    axios.get("api/dashboard/corder")
+                         .then(({ data }) => (this.customerOrders = data.data));
+            },
+
+            loadCustomer(){
+
+                    axios.get("api/dashboard/customer")
+                         .then(({ data }) => (this.customers = data.data));
+            },
+
+            loadproduction(){
+
+                    axios.get("api/dashboard/production")
+                         .then(({ data }) => (this.production = data.data));
+            },
+
+            loadWIP(){
+
+                    axios.get("api/dashboard/wip")
+                         .then(({ data }) => (this.wip = data.data));
+            },
+
+            loadDone(){
+
+                    axios.get("api/dashboard/done")
+                         .then(({ data }) => (this.done = data.data));
+            },
+
+            loadBlocked(){
+
+                    axios.get("api/dashboard/blocked")
+                         .then(({ data }) => (this.blocked = data.data));
+            },
+
+            loadStock(){
+
+                    axios.get("api/dashboard/stock")
+                         .then(({ data }) => (this.stock = data.data));
+            },
+
+             loadMorderCount(){
+
+                    axios.get("api/dashboard/morderCount")
+                         .then(({ data }) => (this.morderCount = data.data));
+            },
+
+
+
+
+        },
+
+         created() {
+
+            this.$Progress.start();
+            this.loadSalesOrder();
+            this.loadManufacturingOrder();
+            this.loadCustomer();
+            this.loadCustomerOrder();
+            this.loadproduction();
+            this.loadWIP();
+            this.loadDone();
+            this.loadBlocked();
+            this.loadStock();
+            this.loadMorderCount();
+            this.$Progress.finish();
+        },
+
+        computed: {
+
+
+        },
+
+
+
         mounted() {
             console.log('Component mounted.')
         }
